@@ -1,0 +1,40 @@
+# Byte-compiled files
+*.pyc
+__pycache__/
+
+# Distribution / build outputs
+/dist/
+/build/
+
+# Virtual environment
+/venv/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Data files (optional - uncomment or adjust based on your project)
+# data/
+# raw_data/
+# processed_data/
+
+# Model files (optional - uncomment or adjust based on your project)
+# *.pkl
+# *.h5
+# *.joblib
+
+# Log files
+*.log
+
+# Editor/IDE specific files (add more as needed)
+.vscode/
+.idea/
+*.swp
+
+# Python package installer files
+*.egg-info/
+.coverage
+htmlcov/
+
+# Database files
+*.sqlite3
