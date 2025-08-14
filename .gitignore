@@ -1,6 +1,7 @@
 # Byte-compiled files
 *.pyc
 __pycache__/
+data/
 
 # Distribution / build outputs
 /dist/
