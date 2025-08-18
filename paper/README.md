@@ -12,6 +12,6 @@ To address this challenge, we introduce **Liberta**, our system for SemEval-2024
 2. Readability and stylistic features, such as Flesch Reading Ease, model verb density, punctuation ratios, and rhetorical markers.
 3. Token-level probablistic features from GPT-2
 
-This paper presents our methodology, experiments, adn findings. In §2, we review related work and elaborate our prior research on machine-generated text detection. §3 delves into our system design and hydrid methodology. In §4, we describe the experiment alongside the dataset. §5 demonstrate the results of our experiements, comparing baslines with our proposed model. Finally, we close with a disscussion of the broader implication of our findings, along with limitation and directions for future work. 
+This paper presents our methodology, experiments, and findings. In §2, we review related work and elaborate our prior research on machine-generated text detection. §3 delves into our system design and hydrid methodology. In §4, we describe the experiment alongside the dataset. §5 demonstrate the results of our experiements, comparing baslines with our proposed model. Finally, we close with a disscussion of the broader implication of our findings, along with limitation and directions for future work. 
 
 
