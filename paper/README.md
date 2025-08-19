@@ -14,20 +14,32 @@ To address this challenge, we introduce **Liberta**, our system for SemEval-2024
 
 This paper presents our methodology, experiments, and findings. In §2, we review related work and elaborate our prior research on machine-generated text detection. §3 delves into our system design and hydrid methodology. In §4, we describe the experiment alongside the dataset. §5 demonstrate the results of our experiments, comparing baselines with our proposed model. Finally, we close with a discussion of the broader implication of our findings, along with limitation and directions for future work.
 # 2 Related Work/Background
+
 # 3 Methodology/System Overview 
-## 3.1 Exploratory Data Analysis 
-We began by systematically analyzing the properties in data in which human-written and machine-generated text differ, using exploratory data analysis (EDA) as a foundation to uncover linguistic and stylistic patterns. 
+## 3.1 Exploratory Data Analysis and Feature Extraction
+We began by systematically analyzing the properties of the data where human-written and machine-generated text differ, using exploratory data analysis (EDA) as a foundation to uncover linguistic and stylistic patterns. 
 Our EDA covered text length distribution, sentence length, unique word counts, lexical diversity, word frequency analysis, POS-tag ratios, and sentence structure, including punctuation use and overall sentence complexity.
 
 A central aspect of our analysis was readability. As shown by [Richter et al., 2023](#references), machine-generated texts tend to have lower Flesch Reading Ease scores, indicating that they are objectively more difficult to read.
-However, participants often rate these texts as easier to understand. This discrepancy can be attributed to a concept known as predictive fluency of word predictability, which suggests that AI texts align with the brain's natural ability to anticipate upcoming words, a principle described by predictive coding theory. 
+However, participants often rate these texts as easier to understand. This discrepancy can be attributed to a concept known as predictive fluency, i.e., the predictability of upcoming words, which suggests that AI texts align with the brain's natural ability to anticipate upcoming words, a principle described by predictive coding theory. 
 
-Guided by these insights, we enhance the standard readability formula sets, text stat metrics such as Flesch Reading Ease, the Fog Index (FKGL), and SMOG scores, measuring the surface-level readability, including factors like sentence length and syllable count. 
-gnth and syllable count by adding linguistic and probabilistic measures aimed at capturing fluency, stylistic regularity, and rhetorical scaffolding. 
-## 3.2 Feature Extraction 
+Motivated by prior work, we extended the use of standard readability metrics (via _textstat_, e.g., Flesch Reading Ease, Fog Index, FKGL, SMOG) by additionally developing two custom modules: 
+
+- Readability and complexity module: Computes seven industry-standard readability formulas and visualizes their distributions across HWT and MGT. 
+- Content and persuasive structure module: Extracts argument indicators, persuasive word density, modal verbs, pronouns, emphasis markers, and punctuation-based features. 
+
+In addition, we incorporated features reflecting grammatical error rates, stylistic repetition (n-gram entropy, bigram frequency), and sentence balance, which further capture the "cleanliness" and formulaic regularity of AI text compared to the variability of human writing. 
+By integrating readability, stylistic, and rhetorical features, our feature extraction pipeline provided measurable and reliable indicators to differentiate machine-generated from human-written text. 
 
 # 4 Experiments 
+## 4.1 Dataset 
+We used the SemEval-2024 Task 8 dataset, which constitute of 56,000 machine-generated texts and 63,000 human-written texts. The training set includes five domains: Wikipedia, WikiHow, Reddit, arXiv, and PeerRead, while the test set utilizes the OUTFOX domain. 
+
+The machine-generated texts were produced by various large language models (LLMs), including GPT-3, GPT-3.5, ChatGPT, BLOOMZ, Cohere, Dolly-v2, and GPT-4.
+
+To gain a deeper understanding of the dataset, we also analyzed the perplexity scores. As illustrated in Figure (see image poster for dataset), human-written texts displayed a significantly higher average perplexity of 88.72, compared to the mean of 53.10 for machine-generated texts. This difference indicates that human writing is generally more irregular and unpredictable, while AI-generated text tends to be more statistically probable and fluent (Richter et al.).
 # 5 Results 
+
 # 6 Conclusion and Future Work
 
 
