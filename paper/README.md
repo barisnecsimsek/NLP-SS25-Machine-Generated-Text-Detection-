@@ -21,12 +21,12 @@ We began by systematically analyzing the properties of the data where human-writ
 Our EDA covered text length distribution, sentence length, unique word counts, lexical diversity, word frequency analysis, POS-tag ratios, and sentence structure, including punctuation use and overall sentence complexity.
 
 A central aspect of our analysis was readability. As shown by [Richter et al., 2023](#references), machine-generated texts tend to have lower Flesch Reading Ease scores, indicating that they are objectively more difficult to read.
-However, participants often rate these texts as easier to understand. This discrepancy can be attributed to a concept known as predictive fluency, i.e., the predictability of upcoming words, which suggests that AI texts align with the brain's natural ability to anticipate upcoming words, a principle described by predictive coding theory. 
+However, participants often rate these texts as easier to understand, a discrepancy can be attributed to predictive fluency, which suggests that AI texts align with the brain's natural ability to anticipate upcoming words. 
 
-Motivated by prior work, we extended the use of standard readability metrics (via _textstat_, e.g., Flesch Reading Ease, Fog Index, FKGL, SMOG) by additionally developing two custom modules: 
+Motivated by prior work, we extended standard readability metrics with additional custom modules:
 
-- Readability and complexity module: Computes seven industry-standard readability formulas and visualizes their distributions across HWT and MGT. 
-- Content and persuasive structure module: Extracts argument indicators, persuasive word density, modal verbs, pronouns, emphasis markers, and punctuation-based features. 
+- A readability and complexity module extended these analyses. 
+- A content and persuasive structure module extracting argument indicators, persuasive word density, modal verbs, pronouns, emphasis markers, and punctuation-based features. 
 
 In addition, we incorporated features reflecting grammatical error rates, stylistic repetition (n-gram entropy, bigram frequency), and sentence balance, which further capture the "cleanliness" and formulaic regularity of AI text compared to the variability of human writing. 
 By integrating readability, stylistic, and rhetorical features, our feature extraction pipeline provided measurable and reliable indicators to differentiate machine-generated from human-written text. 
