@@ -41,13 +41,36 @@ To gain a deeper understanding of the dataset, we also analyzed the perplexity s
 # 5 Results 
 
 # 6 Conclusion and Future Work
+Our work in the SemEval Task 8 Subtask A mainly focused on the detection of monolingual English, integrating transformer embeddings with readability, grammatical, and rhetorical features. We showed that hybrid systems can achieve effective performance in machine-generated detection. 
+A key limitation of our approach is its reliance on formulas specific to the English language, which limits their cross-lingual applicability. 
+Future studies should therefore explore the design of multilingual linguistic features. [Ho and Chan, 2023](#references) indicates that cross-lingual transferability depends on linguistic similarity, context, and resource availability, with multilingual models like mBERT performing better on high-resource languages.
+As suggested by [Peters et al., 2009](#references) language-specific readability indicies (e.g., LIX, Amstad) could be integrated with language-agnostic features such as sentence length variance, punctuation density, or lexical entropy. A promising direction is to combine cross-lingual embeddings (e.g., XLM-R, mBERT) with symbolic features, and to replace language-specific grammar tools with perplexity-based proxies capable of generalizing robustly across languages. 
+Furthermore, rhetorical elements may be extended across languages by mapping language-independent discourse categories ([Sharma & Agrawal, 2019](#references)). Discourse conventions differ across lingustic and cultural contexts. 
 
 
 ## References
 
 Richter, J., Haugen, J., Paparoidami, V., & Reber, R. (2023).  
 *Persuasive messages written by generative AI are easier to read, liked better, and perceived as more probably true than messages written by humans.*  
-University of Oslo & Norwegian Institute of Public Health. https://doi.org/xxxxx
+University of Oslo & Norwegian Institute of Public Health.  
+[https://doi.org/10.31234/osf.io/3t8fn](https://doi.org/10.31234/osf.io/3t8fn)
+
+Ho, T. Y., & Chan, C. H. (2023).  
+*Evaluating Transferability in Multilingual Text Analyses.*  
+Proceedings of the International AAAI Conference on Web and Social Media, 17(1), 652–663.  
+[https://doi.org/10.1609/icwsm.v17i1.22121](https://doi.org/10.1609/icwsm.v17i1.22121)  
+
+Peters, C., Clough, P., Gey, F., Karlgren, J., Magnini, B., Oard, D. W., … & Womser-Hacker, C. (2009).  
+*Experimental IR Meets Multilinguality, Multimodality, and Interaction: Proceedings of the CLEF 2009 Workshop.*  
+Lecture Notes in Computer Science, vol 6241. Springer.  
+[https://doi.org/10.1007/978-3-642-15751-6](https://doi.org/10.1007/978-3-642-15751-6)  
+
+Sharma, D., & Agrawal, A. (2019).  
+*Intelligent Human Computer Interaction.*  
+Proceedings of the 11th International Conference on Intelligent Human Computer Interaction (IHCI 2019).  
+Springer.  
+[https://doi.org/10.1007/978-3-030-50936-1](https://doi.org/10.1007/978-3-030-50936-1)  
+
 
 
 
