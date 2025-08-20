@@ -1,0 +1,272 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[preprint]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, arrows.meta}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{xurl}
+\usepackage{hyperref}
+
+% figure 1 
+\tikzstyle{startstop} = [rectangle, rounded corners, 
+minimum width=3cm, 
+minimum height=1cm,
+text centered, 
+draw=black, 
+fill=red!30]
+
+\tikzstyle{io} = [ellipse, 
+minimum width=3cm,
+minimum height=1cm,
+align=center,
+draw=black,
+fill=blue!30
+]
+
+\tikzstyle{stack} = [rectangle,
+draw=black,
+fill=green!30,
+align=center,
+minimum width=3.2cm,
+minimum height=1cm]
+
+\tikzstyle{vector} = [rectangle, rounded corners, 
+draw=black,
+fill=yellow!30,
+align=center, 
+minimum width=3.25cm,
+minimum height=1cm]
+
+\tikzstyle{ffn} = [rectangle,
+draw=black, 
+fill=pink!90,
+align=center, 
+minimum width=7cm,
+minimum height=0.5cm,
+rotate=90]
+
+\tikzstyle{background} = [rectangle, rounded corners, 
+draw=black,
+fill=yellow!10,
+minimum height=7cm, 
+minimum width=4cm]
+
+\tikzstyle{class} = [rectangle, rounded corners, 
+draw=black, 
+minimum width=3cm,
+minimum height=1cm]
+
+\title{Liberta: A Hyrbid Transformer-Linguistic Model for Machine-generated Text Detection}
+
+\author{Fabian Kobylanskyj, Bari\c{s} \c{S}im\c{s}ek, Jian Sun \and Jiwoo Lee \\Technichal University of Munich, Germany}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+With the rapid advancement of Large Language Models (LLMs) capable of generating text highly resembling human writing, 
+a critical task is to distinguish between human written and machine-generated text. This paper describes our work as 
+part of the NLP Bachelor Praktikum SS2025 on the SemEval 2024 Task 8: \emph{Multidomain, Multimodel and Multilingual 
+Machine-Generated Text Detection}. Our method focused on combining RoBERTa embeddings with linguistic and 
+token probabilistic features on tackling Subtask A: Human vs Machine Text Classification. The final model’s architecture
+was systematically developed on the monolingual track to obtain a reliably working variant, which later was adapted and 
+evaluated in a multilingual context. 
+Our results demonstrate that this hybrid approach can compete with the top performing teams of the competition, 
+achieving an accuracy of 88.64\% on the official test dataset for the monolingual, and an accuracy of x\% for the 
+multilingual track. 
+
+\end{abstract}
+
+\section{Introduction}
+LLMs have a significant influence on our daily tasks across a wide range of domains, from education and research to 
+content creation and communication. Since their impact on society is significantly shaping how we live and work, 
+the potential risks associated with them are equally substantial. From spreading misinformation \cite{kreps2022all}, gaining 
+unfair advantages in exams to plagiarism \cite{wahle2022large}, and a societal risk when it becomes unclear if 
+communication or information comes from a human or machine, there are many dangers and potentially malicious use cases 
+that make it crucial to develop automated means for detecting machine-generated text.
+In response, different detection tools have been developed. However, since a great deal of effort is put into developing
+and improving LLMs, the detection of machine-generated text turned out to be an ongoing arms race where the rapid 
+improvement of LLMs challenges detectors to deliver accurate results. A striking example for this is the OpenAI 
+classifier, which was released in 2023 and discontinued shortly after due to a low rate of accuracy \cite{OPAI}.
+The SemEval 2024 Task 8: \emph{Multidomain, Multimodel and Multilingual Machine-Generated Text Detection} addresses 
+this challenge and provides an incentive to find solutions to the detection of machine-generated text across multiple 
+generators \cite{wang2024semeval}. In the following we describe our solution to the monolingual track of Subtask A: Human vs Machine Text 
+Classification, which is a hybrid model that combines RoBERTa embeddings, readability features and token-level 
+probabilistic features.
+We also present and discuss the adaption of this hybrid model to the multilingual track of Subtask A, which additionally 
+to English includes Arabic, German and Italian as surprising languages. During the development of our models we adhered to the same conditions as participating 
+teams in the shared task in order to ensure a fair comparison. 
+Our results suggest that a hybrid model that combines those three feature sets can significantly improve 
+classification perfomance and yield a more robust approach than relying on a PLM alone. While RoBERTa successfully 
+captures semantic nuances of the input text, the engineered features provide complementary information that RoBERTa 
+alone misses. 
+
+\begin{figure*}[t]
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[node distance=2cm, thick, 
+    >={Stealth[width=5pt,length=7pt]}
+    ]
+    
+    \node (start) [startstop] {Input};
+    
+    \node (trans) [io, right=of start, yshift=2.5cm] {RoBERTa};
+    
+    \node (gpt2) [io, right=of start, yshift=-2.5cm, xshift=-2.5cm, fill=gray!30] {GPT-2};
+    
+    \node (rex2) [stack, right=of start, yshift=0.2cm, xshift=0.7cm] {};
+    \node (rex1) [stack, right=of start, yshift=0.1cm, xshift=0.6cm] {};
+    \node (rex) [stack, right=of start, xshift=0.5cm] {Readability\\ Extractor};
+    
+    \node (ex2) [stack, right=of gpt2, yshift=0.2cm, xshift=-0.1cm, fill=orange!30] {};
+    \node (ex1) [stack, right=of gpt2, yshift=0.1cm, xshift=-0.2cm, fill=orange!30] {};
+    \node (ex) [stack, right=of gpt2, yshift=-0.0cm, xshift=-0.3cm, fill=orange!30] {Probabilistic\\ Extractor};
+    
+    \node (backvec) [background, right=3.0cm of rex]{};
+    
+    \node (cls) [vector, right=4.1cm of trans] {[CLS Embedding]};
+    \node (rvec) [vector, below= of cls, right=3.4cm of rex] {Readability Vector};
+    \node (pvec) [vector, below= of cls, right=1.4cm of ex2] {Probabilistic Vector};
+    
+    \node (ffn) [ffn, right= of pvec, xshift=-1.225cm] {Feed Forward Network};
+    
+    \node (human) [class, right= of start, xshift=14cm, yshift=1.5cm] {Human};
+    \node (machine) [class, right= of start, xshift=14cm, yshift=-1.5cm] {Machine};
+    
+    % start arrows
+    % split nodes 
+    \coordinate (split) at (gpt2|- rex);
+    \coordinate (split2) at (gpt2 |-trans);
+    
+    \draw (start) -- (split);
+    \draw (split) edge[->] (gpt2);
+    \draw (split) edge[->] (rex);
+    \draw (split) -- (split2);
+    \draw[->] (split2) -- (trans);
+    
+    
+    \draw (gpt2) edge[->] (ex);
+    
+    \draw[->] (trans) -- (cls);
+    \draw[->] (rex) -- (rvec);
+    \draw[->] (ex2) -- (pvec);
+    
+    \draw[->] (backvec) -- (ffn.north);
+    
+    \draw[->] (ffn) -- (human.west);
+    \draw[->] (ffn) -- (machine.west);
+    
+    
+    \end{tikzpicture}
+    }
+\caption{Overview of the proposed Hybrid Model Architecture combining three different feature vectors.}
+\label{fig:Model}
+\end{figure*}
+
+\section{Related Work}
+For the binary classification task of machine-generated text detection as in Subtask A, there are two main 
+approaches. Zero-shot methods and supervised methods \cite{wang2024semeval}. Zero-shot methods have the advantage of 
+not relying on curated datasets of human written and machine-generated text. This can be particularly beneficical in 
+the context of the previously mentioned "arms race", where newer LLMs are already far ahead of their predecessors.
+Although, zero-shot detectors are considered less accurate, innovations like DetectGPT, which only uses log 
+probabilities computed by the model of interest, show that they can accelarate the development of more robust and 
+generalizable methods of machine-generated text detection \cite{mitchell2023detectgpt}. \\
+In the shared task, however, most prominently used by the participating teams were supervised training methods.
+Among those, there are three main groupds of methods. The first one is a fine-tuned detection, which uses a 
+pre-trained language model (PLM) and further trains it on the training dataset. Team USTC-BUPT is among the best performing 
+teams at the monolingual track of Subtask A only utilizing PLMs. By adding a gradient reversal layer and 
+a domain classifier that additionally outputs domain labels they achieved an accuracy of 96.10\% \cite{guo2024ustc}.\\ 
+A second major line focuses on statistical and probabilistic methods. These methods build on the principle that LLMs choose tokens
+they assign a higher probability to, while humans tend to write in a more "surprising" way.
+The first ranking Team Genaios employ their model LLMixtic, which mixes token-level probabilistic features from 
+four different Llama-2 models forming a feature vector that is fed into a Transformer Encoder. Their method proved 
+highly effective, achieving an accuracy of 96.88\% on the monolingual and 75.67\% on the multilingual track \cite{sarvazyan2024genaios}.
+Finally, there is a stylometric detection that analyzes linguistic features to distinguish between machine-generated
+and human written text. By testing a variety of different features as lexical diversity, text statistics and readability
+features and combining them with CLS embeddings from a transformer encoder model, Team PetKaz achieved an accuracy 
+of 90.51\% on the monolingual track \cite{petukhova2024petkaz}.
+
+
+\section{Methodology}
+
+Figure \ref{fig:Model} depicts the architecture of our best performing model. It combines three distinct types of features extracted 
+from an input text. The semantic embeddings of a fine-tuned auto-encoder model, different readability metrics and 
+token-level probabilistic features. This feature vector is passed through a feed-forward neural network for 
+classification. 
+\subsection{Semantic Feature Extraction}
+We employ RoBERTa-base, fine-tuned on the Machine-generated text classification task. The CLS Token represents the entire 
+input sequence and is placed at the beginning of the input, capturing important semantic and contextual information. For 
+each input we extract the CLS Token embedding, which for RoBERTa-base is 768-dimensional, and use it as the first part of our 
+feature vector. 
+\subsection{Readability Feature Extraction}
+While today’s LLM’s generate grammatically correct and coherent text, their output subtly differs from human written text, 
+which we tried to make use of by devoting another part of our feature vector to a detailed linguistic analysis of the 
+input sequence. Team Petkaz at the shared task, whose architecture strongly resembles ours, suggests a range of 
+linguistic features such as text statistics like the number of difficult words, stylometric features, lexical diversity 
+and readability features. 
+
+Based on our data analysis, we decided to include the latter into our model. Previous works suggest that 
+machine-generated text tends to be more difficult to read, i.e more complex than human written equivalents. \cite{georgiou2024differentiating} for example, 
+reports higher Flesch Reading Ease scores for human texts, which suggest that they are easier to read.
+Guided by this thesis, we calculate a variety of readability metrics including the following.\\
+
+\textbf{Flesch Reading Ease and Flesch-Kincaid Grade Level.} Focuses on sentence length and syllable count per word.
+{\small
+\[
+    \text{FK} = 0.39 \times \frac{\text{total words}}{\text{total sentences}} + 11.8 \times \frac{\text{total syllables}}{\text{total words}} - 15.59
+\]}
+
+\textbf{Gunning Fog Index.} Asses sentence complexity by analyzing polysyllabic words.
+{\small
+\[
+    \text{GFI} = 0.4 \times \left(\frac{\text{total words}}{\text{total sentences}} + 100 \times \frac{\text{complex words}}{\text{total words}}\right)
+\]}
+
+\textbf{Automated Readability Index.} Counts number of characters per word and number of words per sentence. 
+{\small
+\[
+    \text{ARI} = 4.71 \times \frac{\text{characters}}{\text{words}} + 0.5 \times \frac{\text{words}}{\text{sentences}} - 21.43
+\]}
+
+\subsection{Token-Probabilistic Feature Extraction}
+This part of the feature extraction focuses on statistical detection of machine-generated text and follows the core 
+hypotheses of machine-generated text being more predictable than human-written text, as humans tend to write in a more 
+surprising way, while LLMs are optimized to choose the next most likely token \cite{holtzman2019curious}. 
+To capture these metrics we extract a comprehensive set of features from the token level probability distribution 
+generated by GPT-2.\\ 
+For a given input text with the tokens \(x_1, x_2,\dots, x_n\), we process the sequence with GPT-2. At the
+\(i\)-th position we can extract the probability distribution \(P(x_{i+1} \mid x_1, \dots, x_i)\) over the entire GPT-2 
+Vocabulary. From this distribution we can derive different features. Here, we used features inspired by the work of 
+Genaios, the first ranking team in the shared task and got a feature vector including the following metrics, averaged 
+across the entire sequence.\\
+For each position we calculate (i) the log probability of the observed token, measuring how likely the token is, 
+given the tokens already seen. For the feature vector we then use the average observed token probability which 
+essentially describes the perplexity of the input sequence. Perplexity is defined as the exponentiated average negative 
+log-likelihood of a sequence X: 
+\[
+    PPL(X) = \exp \left( -\frac{1}{t} \sum_{i} \log p_{\theta} (x_i|x_{<i})\right)
+\]
+Intuitively, it can be thought of as an evaluation of the model’s uncertainty when predicting
+the next token. A lower perplexity, and thus a higher average observed 
+log-probability, is a strong indicator of machine-generated text. 
+We further calculate (ii) the probability of the most likely token, which describes the confidence of the model at each 
+step. 
+Finally, we take (iii) the entropy, which measures the uncertainty of the distribution. A low entropy would indicate that 
+the model is highly confident in a few tokens.  
+
+
+
+\bibliography{references}
+\end{document}
