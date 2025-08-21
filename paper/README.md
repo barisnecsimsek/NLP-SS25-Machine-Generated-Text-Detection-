@@ -38,6 +38,16 @@ We used the SemEval-2024 Task 8 dataset, which constitute of 56,000 machine-gene
 The machine-generated texts were produced by various large language models (LLMs), including GPT-3, GPT-3.5, ChatGPT, BLOOMZ, Cohere, Dolly-v2, and GPT-4.
 
 To gain a deeper understanding of the dataset, we also analyzed the perplexity scores. As illustrated in Figure (see image poster for dataset), human-written texts displayed a significantly higher average perplexity of 88.72, compared to the mean of 53.10 for machine-generated texts. This difference indicates that human writing is generally more irregular and unpredictable, while AI-generated text tends to be more statistically probable and fluent (Richter et al.).
+## 4.x Data Augmentation
+During model training, we aim to improve the accuracy of machine-generated text detection through data augmentation. Overfitting is a common phenomenon, where the model achieves high accuracy on the training data but performs poorly on unseen test data. A simple yet effective approach to mitigate this issue is to enlarge the training dataset, thereby optimizing the final model by replacing or extending the original training samples.
+
+To enhance the diversity of the training data, we applied data augmentation exclusively to human-written samples (label = 0) in the training set. The objective was to introduce linguistic variation into the human class, thereby reducing overfitting and improving the model’s ability to generalize in distinguishing human-written from machine-generated text.
+
+For this purpose, we employed the **`ibm-research/qcpg-sentences`** paraphrasing model, a pre-trained sequence-to-sequence model designed for sentence-level rewriting. All human-written texts were first segmented into sentences using punctuation and line breaks as delimiters. We then compiled a set of unique sentences and paraphrased them in batches of 256 using the model on GPU. Each original sentence was mapped to its corresponding paraphrase, forming a dictionary that was subsequently used to reconstruct full texts by replacing original sentences with their generated counterparts. The augmented dataset was saved in a new file, where each entry preserved the original fields and included an additional field (`"gen_text"`) containing the paraphrased version. 
+
+In total, the augmentation process produced a large collection of paraphrased human-written samples. This procedure effectively expanded the training set and increased the variability of human text without altering the machine-generated samples, thereby balancing the data in a way that favors improved generalization of the detection model.
+
+In the preliminary evaluation using only the baseline RoBERTa model, the accuracy improved from 65.14% with the original training data to 68.10% after applying data augmentation. 
 # 5 Results 
 
 # 6 Conclusion and Future Work
