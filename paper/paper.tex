@@ -67,9 +67,9 @@ draw=black,
 minimum width=3cm,
 minimum height=1cm]
 
-\title{Liberta: A Hyrbid Transformer-Linguistic Model for Machine-generated Text Detection}
+\title{Liberta: A Hybrid Transformer-Linguistic Model for Machine-generated Text Detection}
 
-\author{Fabian Kobylanskyj, Bari\c{s} \c{S}im\c{s}ek, Jian Sun \and Jiwoo Lee \\Technichal University of Munich, Germany}
+\author{Fabian Kobylanskyj, Bari\c{s} \c{S}im\c{s}ek, Jian Sun \and Jiwoo Lee \\Technical University of Munich, Germany}
 
 \begin{document}
 
@@ -110,7 +110,7 @@ We also present and discuss the adaption of this hybrid model to the multilingua
 to English includes Arabic, German and Italian as surprising languages. During the development of our models we adhered to the same conditions as participating 
 teams in the shared task in order to ensure a fair comparison. 
 Our results suggest that a hybrid model that combines those three feature sets can significantly improve 
-classification perfomance and yield a more robust approach than relying on a PLM alone. While RoBERTa successfully 
+classification performance and yield a more robust approach than relying on a PLM alone. While RoBERTa successfully 
 captures semantic nuances of the input text, the engineered features provide complementary information that RoBERTa 
 alone misses. 
 
@@ -178,13 +178,13 @@ alone misses.
 \section{Related Work}
 For the binary classification task of machine-generated text detection as in Subtask A, there are two main 
 approaches. Zero-shot methods and supervised methods \cite{wang2024semeval}. Zero-shot methods have the advantage of 
-not relying on curated datasets of human written and machine-generated text. This can be particularly beneficical in 
+not relying on curated datasets of human written and machine-generated text. This can be particularly beneficial in 
 the context of the previously mentioned "arms race", where newer LLMs are already far ahead of their predecessors.
 Although, zero-shot detectors are considered less accurate, innovations like DetectGPT, which only uses log 
-probabilities computed by the model of interest, show that they can accelarate the development of more robust and 
+probabilities computed by the model of interest, show that they can accelerate the development of more robust and 
 generalizable methods of machine-generated text detection \cite{mitchell2023detectgpt}. \\
 In the shared task, however, most prominently used by the participating teams were supervised training methods.
-Among those, there are three main groupds of methods. The first one is a fine-tuned detection, which uses a 
+Among those, there are three main groups of methods. The first one is a fine-tuned detection, which uses a 
 pre-trained language model (PLM) and further trains it on the training dataset. Team USTC-BUPT is among the best performing 
 teams at the monolingual track of Subtask A only utilizing PLMs. By adding a gradient reversal layer and 
 a domain classifier that additionally outputs domain labels they achieved an accuracy of 96.10\% \cite{guo2024ustc}.\\ 
@@ -211,12 +211,11 @@ input sequence and is placed at the beginning of the input, capturing important 
 each input we extract the CLS Token embedding, which for RoBERTa-base is 768-dimensional, and use it as the first part of our 
 feature vector. 
 \subsection{Readability Feature Extraction}
-While today’s LLM’s generate grammatically correct and coherent text, their output subtly differs from human written text, 
+While today’s LLMs generate grammatically correct and coherent text, their output subtly differs from human written text, 
 which we tried to make use of by devoting another part of our feature vector to a detailed linguistic analysis of the 
 input sequence. Team Petkaz at the shared task, whose architecture strongly resembles ours, suggests a range of 
 linguistic features such as text statistics like the number of difficult words, stylometric features, lexical diversity 
-and readability features. 
-
+and readability features.\\ 
 Based on our data analysis, we decided to include the latter into our model. Previous works suggest that 
 machine-generated text tends to be more difficult to read, i.e more complex than human written equivalents. \cite{georgiou2024differentiating} for example, 
 reports higher Flesch Reading Ease scores for human texts, which suggest that they are easier to read.
@@ -254,7 +253,7 @@ across the entire sequence.\\
 For each position we calculate (i) the log probability of the observed token, measuring how likely the token is, 
 given the tokens already seen. For the feature vector we then use the average observed token probability which 
 essentially describes the perplexity of the input sequence. Perplexity is defined as the exponentiated average negative 
-log-likelihood of a sequence X: 
+log-likelihood of a sequence X with t tokens: 
 \[
     PPL(X) = \exp \left( -\frac{1}{t} \sum_{i} \log p_{\theta} (x_i|x_{<i})\right)
 \]
@@ -266,7 +265,36 @@ step.
 Finally, we take (iii) the entropy, which measures the uncertainty of the distribution. A low entropy would indicate that 
 the model is highly confident in a few tokens.  
 
+\section{Experiments}
+\subsection{Dataset}
+We used the SemEval-2024 Task 8 dataset, which is an extension of the M4 dataset \cite{wang2023m4}. 
+The training set includes five domains: Wikipedia, WikiHow, Reddit, arXiv and PeerRead. Machine-generated 
+texts were produced by various LLMs, including davinci-003, ChatGPT, Cohere and Dolly-v2. For the test set 
+Outfox was used as a surprising domain and GPT-4 and BLOOMz are introduced as surprising generators. The 
+labels are roughly balanced with 56,400 machine-generated and 63,351 human-written texts.  
+The multilingual training set additionally contains texts in Chinese, Urdu, Bulgarian and Indonesian, and 
+for the multilingual test set, Arabic, German and Italian are introduced as unseen languages. 
+Table \ref{tab:Dataset} depicts the dataset statistics. Machine-generated texts were generated by prompting to write an article 
+given a title (Wikipedia) or an abstract given a paper title (arXiv) and similar prompting for other domains. 
+As in the official shared task setting, we adhered to the rules of not using additional training data, and by 
+treating the test set labels as unavailable during the development of our model in order to assure a fair 
+comparison to other teams results. Following the official task description, we employed accuracy as the 
+evaluation metric to determine the quality of our model.
 
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    \textbf{Track} & \textbf{\#Train} & \textbf{\#Dev} & \textbf{\#Test} \\
+    \hline
+    Monolingual & 119,757 & 5000 & 34,272 \\
+    \hline
+    Multilingual & 172,417 & 4000 & 42,378 \\
+    \hline
+    \end{tabular}
+    \caption{Dataset statistics for Subtask A}
+    \label{tab:Dataset}
+\end{table}
 
 \bibliography{references}
 \end{document}
