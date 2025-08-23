@@ -94,11 +94,11 @@ content creation and communication. Since their impact on society is significant
 the potential risks associated with them are equally substantial. From spreading misinformation \cite{kreps2022all}, gaining 
 unfair advantages in exams to plagiarism \cite{wahle2022large}, and a societal risk when it becomes unclear if 
 communication or information comes from a human or machine, there are many dangers and potentially malicious use cases 
-that make it crucial to develop automated means for detecting machine-generated text.
+that make it crucial to develop automated means for detecting machine-generated text.\\
 In response, different detection tools have been developed. However, since a great deal of effort is put into developing
 and improving LLMs, the detection of machine-generated text turned out to be an ongoing arms race where the rapid 
 improvement of LLMs challenges detectors to deliver accurate results. A striking example for this is the OpenAI 
-classifier, which was released in 2023 and discontinued shortly after due to a low rate of accuracy \cite{OPAI}.
+classifier, which was released in 2023 and discontinued shortly after due to a low rate of accuracy \cite{OPAI}.\\
 The SemEval 2024 Task 8: \emph{Multidomain, Multimodel and Multilingual Machine-Generated Text Detection} addresses 
 this challenge and provides an incentive to find solutions to the detection of machine-generated text across multiple 
 generators \cite{wang2024semeval}. In the following we describe our solution to the monolingual track of Subtask A: Human vs Machine Text 
@@ -274,6 +274,17 @@ the model is highly confident in a few tokens.
 The concatenated feature vector is then passed into a feed-forward neural network, where the output layer classifies the text 
 as either human or machine. 
 
+\subsection{Multilingual}
+Transferring our previously described system architecture to a multilingual context presented significant challenges. 
+Considering that GPT-2 is a transformer model pre-trained on a very large corpus of English data only, the feature 
+representation from the token-probabilistic feature extractor was of no use for non-english texts.  
+Moreover, readability features are quite language-specific. Applying the same feature for various languages yields very 
+inaccurate to irrelevant results. 
+To address these challenges, our multilingual approach shifts to a more basic but very effective system relying on a 
+fine-tuned XLM-RoBERTa (XLM-R) model. XLM-R is a model trained on 100 different languages, which makes it suitable for 
+cross-lingual tasks. Unlike in the monolingual system, we do not apply a self-designed feed-forward neural network, but utilize the transformer library 
+that automatically attaches a classification head on top of the model that produces the final classification logits. 
+
 \section{Experiments}
 \subsection{Dataset and Evaluation}
 We used the SemEval-2024 Task 8 dataset, which is an extension of the M4 dataset \cite{wang2023m4}. 
@@ -309,9 +320,75 @@ framework provided in the task's description, and slightly modified to support p
 With limited computing resources at hand, we were searching for ways, to maximize performance, while minimizing
 computational costs. Low-Rank Adaptation (LoRA) is reported to achieve comparably good or better results than full fine-tuning,
 despite having fewer trainable parameters. By freezing pre-trained model weights and adding small, trainable matrices to the 
-model's layers, LoRA drastically reduces the number of trainable parameters. We trained RoBERTa-base for 3 epochs with a learning rate of 2e-4 
-and a batch size of 16. For the LoRa configurations, we set the rank of the low-rank matrices r to 64, 
+model's layers, LoRA drastically reduces the number of trainable parameters \cite{hu2022lora}. We trained RoBERTa-base for 3 epochs with a learning rate of 2e-4 
+and a batch size of 16. XLM-R was trained for 4 epochs with a learning rate of 2e-5. For the LoRa configurations, we set the rank of the low-rank matrices to 64, 
 lora\_alpha (scaling factor of the learning rate) at 16 and a dropout of 0.01 to avoid overfitting. 
+The feed-forward neural network consists of three fully connected hidden layers, followed by a batch normalization, a ReLU activation function and a dropout layer 
+with a rate of 0.3 to reduce overfitting and improve the generalization of the model. The weights were initialized using Xavier/Glorot initialization to avoid 
+vanishing or exploding gradients.\\
+
+All our models were trained using the NVIDIA A100 GPU. We used the Hugging Face Transformer library to fine-tune RoBERTa and XLM-RoBERTa, and
+developed our final model using PyTorch. 
+
+\subsection{Experiments on the development set}
+Table \ref{tab:Accuracy} shows the evaluation results on the development set with different combinations of our hybrid model. 
+As a baseline we used the fine-tuned LoRA RoBERTa.
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l c c}
+    \hline
+    \textbf{Configuration} & \textbf{Accuracy} & \textbf{F1-Score} \\
+    \hline
+    emb & 0.744 & 0.727 \\
+    
+    emb + lex & 0.70 & 0.675 \\
+    
+    emb + read & \textbf{0.773} & \textbf{0.76} \\
+    
+    emb + prob & 0.727 & 0.72 \\ 
+    
+    emb + read + prob & 0.757 & 0.75 \\
+    \hline
+    \end{tabular}
+    \caption{Accuracy of different configurations on the development set of the monolingual track.
+    Configurations include embeddings (emb), lexical diversity (lex), readability (read), token-probabilistic (prob)}
+    \label{tab:Accuracy}
+\end{table}
+
+First of all, we see that the best accuracy of 77.3\% is achieved by only adding readability features to the RoBERTa baseline. With a slight 
+decrease of 1.6\% in accuracy, the combination of readability and probabilistic features is the second best performing configuration. We note, however, that both configurations 
+increase the accuracy compared to a transformer encoder only approach. Adding only probabilistic features, however, causes a slight decrease in performance with an 
+accuracy of only 71.02\%.\\
+Apart from readability, we first also experimented with other linguistic features. \cite{petukhova2024petkaz} reports that their best accuracy is achieved by combining 
+RoBERTa embeddings with lexical diversity features including type-token ratio and hypergeometric distribution \emph{d} (HDD). When employing this feature
+combination, however, we noted a decrease in accuracy compared to the RoBERTa only configuration. Upon further investigation, we noticed that machine-generated texts 
+in the training data are associated with a higher TTR than human texts. In the development set, however, it is the other way around. This might be because 
+of the surprising generator BLOOMz that was used for the dev set. For Team PetKaz, it might work because they use a reduced training 
+set, which improves the accuracy of this specific configuration from 0.73\% to 0.95\%. We, however, decided that lexical diversity might not 
+be robust enough across different generators to serve as a reliable feature for the classification task.
+While our model variant that only uses readability features with embeddings performed best on the development set, we ultimately decided to choose the second best variant 
+that also includes probabilistic features as our final model. This decision is based on the assumption that generally probabilistic features provide valuable information as 
+seen in the work from Team Genaios that can make our model more robust and achieve better results in the test set where a wider variety of LLMs are used for the generation of
+AI texts.\\
+
+Based on our results with the monolingual LoRA-RoBERTa, we hypothesized that following the same approach in Parameter-Efficient Fine-Tuning would achieve good results on the multilingual
+track by fine-tuning XLM-R with the same LoRA parameters. However, initial results obtained on the development set were not satisfactory, which is why we decided to do a full fine-tuning of XLM-R. 
+This ultimately led to a performance increase of approximately 8\%. 
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l c c}
+    \hline
+    \textbf{Model} & \textbf{Accuracy} & \textbf{F1-Score} \\
+    \hline
+    LoRA XLM-R & 0.5493 & 0.482 \\
+    
+    XLM-R & \textbf{0.6295} & \textbf{0.603} \\
+    \hline
+    \end{tabular}
+    \caption{Accuracy of LoRA XLM-R vs. fully fine-tuned XLM-R on multilingual development set}
+    \label{tab:MultiAccuracy}
+\end{table}
 
 \subsection{Data Augmentation}
 During model training, we aim to improve the accuracy of machine-generated text detection through data augmentation. Overfitting is a common phenomenon, where the model achieves high accuracy on the training data but performs poorly on unseen test data. A simple yet effective approach to mitigate this issue is to enlarge the training dataset, thereby optimizing the final model by replacing or extending the original training samples.
