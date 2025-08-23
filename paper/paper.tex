@@ -313,7 +313,16 @@ model's layers, LoRA drastically reduces the number of trainable parameters. We 
 and a batch size of 16. For the LoRa configurations, we set the rank of the low-rank matrices r to 64, 
 lora\_alpha (scaling factor of the learning rate) at 16 and a dropout of 0.01 to avoid overfitting. 
 
+\subsection{Data Augmentation}
+During model training, we aim to improve the accuracy of machine-generated text detection through data augmentation. Overfitting is a common phenomenon, where the model achieves high accuracy on the training data but performs poorly on unseen test data. A simple yet effective approach to mitigate this issue is to enlarge the training dataset, thereby optimizing the final model by replacing or extending the original training samples.
 
+To enhance the diversity of the training data, we applied data augmentation exclusively to human-written samples (label = 0) in the training set. The objective was to introduce linguistic variation into the human class, thereby reducing overfitting and improving the model’s ability to generalize in distinguishing human-written from machine-generated text.
+
+For this purpose, we employed the \texttt{ibm-research/qcpg-sentences} paraphrasing model, a pre-trained sequence-to-sequence model designed for sentence-level rewriting. All human-written texts were first segmented into sentences using punctuation and line breaks as delimiters. We then compiled a set of unique sentences and paraphrased them in batches of 256 using the model on GPU. In total, the augmentation process produced a large collection of paraphrased human-written samples. This procedure effectively expanded the training set and increased the variability of human text without altering the machine-generated samples, thereby balancing the data in a way that favors improved generalization of the detection model.
+
+In the preliminary evaluation using only the baseline RoBERTa model, the accuracy improved from 65.14\% with the original training data to 68.10\% after applying data augmentation. However, when the paraphrased sentences were incorporated into the dataset by replacing the original training samples and applied to the hybrid model, no improvement in accuracy was observed; the performance remained at only 75\%. This indicates that simply enlarging the dataset does not necessarily lead to better model performance. A possible explanation is that the paraphrased sentences did not reinforce or enrich the discriminative features available to the model and may even have blurred the boundary between human-written and machine-generated text, since paraphrasing itself can be considered a form of assisted generation.
+
+Therefore, we did not retain data augmentation in the final implementation. Nevertheless, this finding suggests that in future stages, data augmentation may be more effective if it relies on more ``manually collected'' data resources, ensuring that the distinctive features of human-written text are preserved, and by selecting augmentation strategies tailored to different model architectures.
 
 \bibliography{references}
 \end{document}
