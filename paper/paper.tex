@@ -69,7 +69,7 @@ minimum height=1cm]
 
 \title{Liberta: A Hybrid Transformer-Linguistic Model for Machine-generated Text Detection}
 
-\author{Fabian Kobylanskyj, Bari\c{s} \c{S}im\c{s}ek, Jian Sun \and Jiwoo Lee \\Technical University of Munich, Germany}
+\author{Fabian Kobylanskyj, Barı\c{s} \c{S}im\c{s}ek, Jian Sun \and Jiwoo Lee \\Technical University of Munich, Germany}
 
 \begin{document}
 
@@ -78,13 +78,13 @@ minimum height=1cm]
 \begin{abstract}
 
 With the rapid advancement of Large Language Models (LLMs) capable of generating text highly resembling human writing, 
-a critical task is to distinguish between human written and machine-generated text. This paper describes our work on the 
+a critical task is to distinguish between human written and machine-generated text. This paper describes Liberta, our approach to the 
 SemEval 2024 Task 8: \emph{Multidomain, Multimodel and Multilingual Machine-Generated Text Detection}. Our method 
 focused on combining RoBERTa embeddings with readability and token-probabilistic features on tackling both the mono- and multilingual track of 
 Subtask A: Human vs Machine Text Classification. 
 On the official test dataset, our system achieved an accuracy of 88.64\% in the monolingual and 79.87\% in the multilingual track. Our results 
 demonstrate that a hybrid approach can significantly enhance the performance in machine-generated text detection compared to a system that solely 
-relies on a transformer-encoder. 
+relies on a transformer based architectures. 
 
 \end{abstract}
 
@@ -101,14 +101,14 @@ improvement of LLMs challenges detectors to deliver accurate results. A striking
 classifier, which was released in 2023 and discontinued shortly after due to a low rate of accuracy \cite{OPAI}.\\
 The SemEval 2024 Task 8: \emph{Multidomain, Multimodel and Multilingual Machine-Generated Text Detection} addresses 
 this challenge and provides an incentive to find solutions to the detection of machine-generated text across multiple 
-generators \cite{wang2024semeval}. In the following we describe our solution to the monolingual track of Subtask A: Human vs Machine Text 
+generators \cite{wang2024semeval}. In the following we describe Liberta, our solution to the monolingual track of Subtask A: Human vs Machine Text 
 Classification, which is a hybrid model that combines RoBERTa embeddings, readability features and token-level 
 probabilistic features.
 We also present and discuss the adaption of this hybrid model to the multilingual track of Subtask A, which additionally 
-to English includes Arabic, German and Italian as surprising languages. During the development of our models we adhered to the same conditions as participating 
+to English includes Arabic, German and Italian. During the development of our models we adhered to the same conditions as participating 
 teams in the shared task in order to ensure a fair comparison. 
 Our results suggest that a hybrid model that combines those three feature sets can significantly improve 
-classification performance and yield a more robust approach than relying on a PLM alone. While RoBERTa successfully 
+classification performance and yield a more robust approach than relying on a PLM (Pre-trained Language Model) alone. While RoBERTa successfully 
 captures semantic nuances of the input text, the engineered features provide complementary information that RoBERTa 
 alone misses. 
 
@@ -182,12 +182,12 @@ Although, zero-shot detectors are considered less accurate, innovations like Det
 probabilities computed by the model of interest, show that they can accelerate the development of more robust and 
 generalizable methods of machine-generated text detection \cite{mitchell2023detectgpt}. \\
 In the shared task, however, most prominently used by the participating teams were supervised training methods.
-Among those, there are three main groups of methods. The first one is a fine-tuned detection, which uses a 
+Among those, there are three main groups of methods. The first approach is a fine-tuned detection, which uses a 
 pre-trained language model (PLM) and further trains it on the training dataset. Team USTC-BUPT is among the best performing 
 teams at the monolingual track of Subtask A only utilizing PLMs. By adding a gradient reversal layer and 
 a domain classifier that additionally outputs domain labels they achieved an accuracy of 96.10\% \cite{guo2024ustc}.\\ 
 A second major line focuses on statistical and probabilistic methods. These methods build on the principle that LLMs choose tokens
-they assign a higher probability to, while humans tend to write in a more "surprising" way.
+they assign a higher probability to, while humans tend to write in a more "unpredictable" way.
 The first ranking Team Genaios employ their model LLMixtic, which mixes token-level probabilistic features from 
 four different Llama-2 models forming a feature vector that is fed into a Transformer Encoder. Their method proved 
 highly effective, achieving an accuracy of 96.88\% on the monolingual and 75.67\% on the multilingual track \cite{sarvazyan2024genaios}.
@@ -243,8 +243,8 @@ and outputs a score that maps to a Grade Level from Kindergarten to College Stud
 \]}
 
 \subsection{Token-Probabilistic Feature Extraction}
-This part of the feature extraction focuses on statistical detection of machine-generated text and follows the core 
-hypotheses of machine-generated text being more predictable than human-written text While humans tend to write in a more 
+Token-probabilistic feature extraction focuses on statistical detection of machine-generated text and follows the core 
+hypotheses of machine-generated text being more predictable to LLMs than human-written text. While humans tend to write in a more 
 surprising way, LLMs are optimized to choose the next most likely token \cite{holtzman2019curious}. 
 To capture these metrics we extract a comprehensive set of features from the token level probability distribution 
 generated by GPT-2.\\ 
@@ -263,7 +263,7 @@ log-likelihood of a sequence X with t tokens:
 Intuitively, it can be thought of as an evaluation of the model’s uncertainty when predicting
 the next token. A lower perplexity, and thus a higher average observed 
 log-probability, is a strong indicator of machine-generated text. 
-We further calculate (ii) the probability of the most likely token, which describes the confidence of the model at each 
+We further calculate (ii) the probability of the most likely token, which describes the confidence of the model at each token prediction
 step. 
 Finally, we take (iii) the entropy, which measures the uncertainty of the distribution. 
 \[ \beta_i = - \sum_{y \in \mathcal{V}} p_\theta(y | x_{<i}) \log p_\theta(y | x_{<i})
@@ -272,7 +272,7 @@ the model is highly confident in a few tokens.
 
 \subsection{Feed-forward neural network}
 The concatenated feature vector is then passed into a feed-forward neural network, where the output layer classifies the text 
-as either human or machine. 
+as either human or machine-generated text. 
 
 \subsection{Multilingual}
 Transferring our previously described system architecture to a multilingual context presented significant challenges. 
@@ -288,16 +288,14 @@ that automatically attaches a classification head on top of the model that produ
 \section{Experiments}
 \subsection{Dataset and Evaluation}
 We used the SemEval-2024 Task 8 dataset, which is an extension of the M4 dataset \cite{wang2023m4}. 
-The training set includes five domains: Wikipedia, WikiHow, Reddit, arXiv and PeerRead. Machine-generated 
+The training set includes texts from five different domains: Wikipedia, WikiHow, Reddit, arXiv and PeerRead. Machine-generated 
 texts were produced by various LLMs, including davinci-003, ChatGPT, Cohere and Dolly-v2. For the test set 
 Outfox was used as a surprising domain and GPT-4 and BLOOMz are introduced as surprising generators. The 
 labels are roughly balanced with 56,400 machine-generated and 63,351 human-written texts.  
 The multilingual training set additionally contains texts in Chinese, Urdu, Bulgarian and Indonesian, and 
 for the multilingual test set, Arabic, German and Italian are introduced as unseen languages. 
 Table \ref{tab:Dataset} depicts the dataset statistics. 
-As in the official shared task setting, we adhered to the rules of not using additional training data, and by 
-treating the test set labels as unavailable during the development of our model in order to assure a fair 
-comparison to other teams results. Following the official task description, we employed accuracy as the 
+As in the official shared task setting, we adhered to the rules of not using additional training data. Following the official task description, we used accuracy as the 
 evaluation metric to determine the quality of our model.
 \begin{table}[ht]
     \centering
@@ -317,11 +315,9 @@ evaluation metric to determine the quality of our model.
 \subsection{Experimental Setup}
 We use RoBERTa-base as the source of the CLS embeddings. For the fine-tuning process we used the baseline 
 framework provided in the task's description, and slightly modified to support parameter-efficient fine-tuning (PEFT). 
-With limited computing resources at hand, we were searching for ways, to maximize performance, while minimizing
-computational costs. Low-Rank Adaptation (LoRA) is reported to achieve comparably good or better results than full fine-tuning,
+With limited computing resources at hand, we searched compute-efficient ways to maximize performance. Low-Rank Adaptation (LoRA) is reported to achieve comparably good or even better results than full fine-tuning,
 despite having fewer trainable parameters. By freezing pre-trained model weights and adding small, trainable matrices to the 
-model's layers, LoRA drastically reduces the number of trainable parameters \cite{hu2022lora}. We trained RoBERTa-base for 3 epochs with a learning rate of 2e-4 
-and a batch size of 16. XLM-R was trained for 4 epochs with a learning rate of 2e-5. For the LoRa configurations, we set the rank of the low-rank matrices to 64, 
+model's layers, LoRA drastically reduces the number of trainable parameters \cite{hu2022lora}. We trained RoBERTa-base for 3 epochs with a learning rate of \(2 \times 10^{-4}\) and a batch size of 16. XLM-R was trained for 4 epochs with a learning rate of \(2 \times 10^{-5}\). For the LoRa configurations, we set the rank of the low-rank matrices to 64, 
 lora\_alpha (scaling factor of the learning rate) at 16 and a dropout of 0.01 to avoid overfitting. 
 The feed-forward neural network consists of three fully connected hidden layers, followed by a batch normalization, a ReLU activation function and a dropout layer 
 with a rate of 0.3 to reduce overfitting and improve the generalization of the model. The weights were initialized using Xavier/Glorot initialization to avoid 
@@ -355,12 +351,12 @@ As a baseline we used the fine-tuned LoRA RoBERTa.
     \label{tab:Accuracy}
 \end{table}
 
-First of all, we see that the best accuracy of 77.3\% is achieved by only adding readability features to the RoBERTa baseline. With a slight 
+We see that the best accuracy of 77.3\% is achieved by only adding readability features to the RoBERTa baseline. With a slight 
 decrease of 1.6\% in accuracy, the combination of readability and probabilistic features is the second best performing configuration. We note, however, that both configurations 
 increase the accuracy compared to a transformer encoder only approach. Adding only probabilistic features, however, causes a slight decrease in performance with an 
 accuracy of only 71.02\%.\\
 Apart from readability, we first also experimented with other linguistic features. \cite{petukhova2024petkaz} reports that their best accuracy is achieved by combining 
-RoBERTa embeddings with lexical diversity features including type-token ratio and hypergeometric distribution \emph{d} (HDD). When employing this feature
+RoBERTa embeddings with lexical diversity features including type-token ratio (TTR) and hypergeometric distribution \emph{d} (HDD). When employing this feature
 combination, however, we noted a decrease in accuracy compared to the RoBERTa only configuration. Upon further investigation, we noticed that machine-generated texts 
 in the training data are associated with a higher TTR than human texts. In the development set, however, it is the other way around. This might be because 
 of the surprising generator BLOOMz that was used for the dev set. For Team PetKaz, it might work because they use a reduced training 
@@ -390,16 +386,56 @@ This ultimately led to a performance increase of approximately 8\%.
     \label{tab:MultiAccuracy}
 \end{table}
 
-\subsection{Data Augmentation}
-During model training, we aim to improve the accuracy of machine-generated text detection through data augmentation. Overfitting is a common phenomenon, where the model achieves high accuracy on the training data but performs poorly on unseen test data. A simple yet effective approach to mitigate this issue is to enlarge the training dataset, thereby optimizing the final model by replacing or extending the original training samples.
+\section{Results}
+On the official SemEval-2024 Task 8 leaderboard, our hybrid system achieved an accuracy of 88.64\% on the monolingual track and 79.87\% on the multilingual track. 
+While we did not officially submit to the shared task, these results would have placed our model at position 16 in the monolingual track. 
+It is important to note that such a placement is only meaningful in the context of the number of participating systems (over 40 teams in total), and that our system was not directly ranked but evaluated under the same conditions. 
 
-To enhance the diversity of the training data, we applied data augmentation exclusively to human-written samples (label = 0) in the training set. The objective was to introduce linguistic variation into the human class, thereby reducing overfitting and improving the model’s ability to generalize in distinguishing human-written from machine-generated text.
+Compared to the top-performing contestants, our accuracy is lower than GenAIOS (96.88\% monolingual, 75.67\% multilingual) and USTC-BUPT (96.10\% monolingual), both of which relied heavily on large-scale probabilistic features or domain specific PLM fine-tuning. 
+However, our results are competitive with other hybrid and linguistically motivated approaches such as PetKaz (90.51\% monolingual), despite using a smaller backbone model (RoBERTa-base) and limited computational resources. 
+This shows that our hybrid approach, which combines transformer embeddings with readability and probabilistic features, can achieve strong performance without requiring very large models or extensive fine-tuning. 
 
-For this purpose, we employed the \texttt{ibm-research/qcpg-sentences} paraphrasing model~\cite{bandel2022qcpg}, a pre-trained sequence-to-sequence model designed for sentence-level rewriting. All human-written texts were first segmented into sentences using punctuation and line breaks as delimiters. We then compiled a set of unique sentences and paraphrased them in batches of 256 using the model on GPU. In total, the augmentation process produced a large collection of paraphrased human-written samples. This procedure effectively expanded the training set and increased the variability of human text without altering the machine-generated samples, thereby balancing the data in a way that favors improved generalization of the detection model.
+Overall, our findings highlight that hybrid systems can remain competitive in machine-generated text detection, particularly when computational efficiency and model size are important constraints.
 
-In the preliminary evaluation using only the baseline RoBERTa model, the accuracy improved from 65.14\% with the original training data to 68.10\% after applying data augmentation. However, when the paraphrased sentences were incorporated into the dataset by replacing the original training samples and applied to the hybrid model, no improvement in accuracy was observed; the performance remained at only 75\%. This indicates that simply enlarging the dataset does not necessarily lead to better model performance. A possible explanation is that the paraphrased sentences did not reinforce or enrich the discriminative features available to the model and may even have blurred the boundary between human-written and machine-generated text, since paraphrasing itself can be considered a form of assisted generation.
+\section{Limitations}
+A significant limitation of our approach is its reliance on token-level probabilistic signals, which are not universally available across model providers. Some closed-source LLMs do not expose per-token log-probabilities or full next-token distributions. Vendors often restrict these outputs to mitigate risks of model extraction, distillation, or prompt inversion. This restricts our ability to compute key probabilistic features, reducing the generalizability of our detector in real-world usage. Consequently, our results may overestimate performance when only models that expose probabilities are evaluated.
 
-Therefore, we did not retain data augmentation in the final implementation. Nevertheless, this finding suggests that in future stages, data augmentation may be more effective if it relies on more ``manually collected'' data resources, ensuring that the distinctive features of human-written text are preserved, and by selecting augmentation strategies tailored to different model architectures.
+Even when token probabilities are available, probabilistic features are susceptible to straightforward evasion. Small textual modifications such as punctuation adjustments, paraphrases, synonym substitutions, or reordering can shift token likelihoods and entropy without altering the underlying semantic meaning. Such edits can move a sequence from a “high-confidence, low-entropy” to distributions that resemble human-written text, thereby lowering classifier reliability.
+
+Another limitation of our approach is its reliance on formulas specific to the English language, which restricts cross-lingual applicability. Readability indices and grammar-based features calibrated to English do not transfer seamlessly to other languages, and discourse conventions vary across linguistic and cultural contexts.
+
+\section{Future Work}
+
+Future studies can explore the design of multilingual linguistic features. Prior work suggests that cross-lingual transferability depends on linguistic similarity, context, and resource availability, with multilingual models such as mBERT performing better on high-resource languages \cite{ho2023transferability}.
+
+Language-specific readability indices (e.g., LIX, Amstad) could be integrated with language-agnostic features such as sentence length variance, punctuation density, or lexical entropy \cite{peters2009clef}. A promising direction is to combine cross-lingual embeddings (e.g., XLM-R, mBERT) with symbolic features, and to replace language-specific grammar tools with perplexity-based proxies capable of generalizing across different languages.
 
 \bibliography{references}
+
+\appendix
+\section{Data Augmentation}
+During model training, we aim to improve the accuracy of machine-generated text detection through data augmentation. Overfitting is a common phenomenon, where the model achieves high accuracy on the training data but performs poorly on unseen test data. A simple yet effective approach to mitigate this issue is to enlarge the training dataset, thereby optimizing the final model by replacing or extending the original training samples.
+
+To enhance the diversity of the training data, we applied data augmentation exclusively to human-written samples in the training set. The objective was to introduce linguistic variation into the human class, thereby reducing overfitting and improving the model’s ability to generalize in distinguishing human-written from machine-generated text.
+
+For this purpose, we employed the \texttt{ibm-research/qcpg-sentences} paraphrasing model~\cite{bandel2022qcpg}, a pre-trained sequence-to-sequence model designed for sentence-level rewriting. All human-written texts were first segmented into sentences using punctuation and line breaks as delimiters. We then compiled a set of unique sentences and paraphrased them in batches of 256 using the model. In total, the augmentation process produced a large collection of paraphrased human-written samples. This procedure effectively expanded the training set and increased the variability of human text without altering the machine-generated samples, thereby balancing the data in a way that favors improved generalization of the detection model.
+
+In the preliminary evaluation using only the baseline RoBERTa model, the accuracy improved from 65.14\% with the original training data to 68.10\% after applying data augmentation. However, when the paraphrased sentences were incorporated into the dataset by replacing the original training samples and applied to the hybrid model, no improvement in accuracy was observed. This indicates that simply enlarging the dataset does not necessarily lead to better model performance. A possible explanation is that the paraphrased sentences did not reinforce or enrich the discriminative features available to the model and may even have blurred the boundary between human-written and machine-generated text, since paraphrasing itself can be considered a form of assisted generation.
+
+Therefore, we did not retain data augmentation in the final implementation.
+
+
+
+
+\section{Contributions}
+\subsection{Fabian Kobylanskyj}
+My work involved both the research about different approaches in order to find suitable methods and features fit for the machine-generated text detection task, as well as analyzing the dataset regarding those features and experimenting with initial baselines, such as logistic regression. Based on this, I proposed and developed the final model design, and implemented and tested it with different feature configurations, which ultimately led to our final best performing model. Additionally, I fine-tuned RoBERTa and XLM-R by using the provided baseline and adapting it to parameter-efficient fine-tuning.  
+I also contributed to the design, preparation and presentation of the poster and wrote a significant portion of the paper.
+\subsection{Barı\c{s} \c{S}im\c{s}ek}
+As one of the more experienced team member who has done similar projects in the past, I helped the team understand and frame the problem, setting directions for everyone so everyone could work independently in a non-blocking manner. This approach let us focus our strengths and knowledge at each stage and do the task that we are best at. I effectively took on a coordinating role throughout the project. I initialized data analysis, getting the first insights that guided us toward the final features. I conducted the majority of the literature review to bring in new ideas from related work and competition. I also built an initial model with a completely different architecture as our starting point, which helped us find what kind of approach would be useful and we later ditched it in favor of our current, best-performing approach. I also handled the major portion of the poster and presented it in Heilbronn to other students and teaching assistants. Finally I helped merge the paper’s sections, performing final checks and proofreading.
+\subsection{Jian Sun}
+At the early stage of the project, I focused on learning NLP and model training techniques, studying solutions from other teams and reviewing related AI detector research. These efforts helped our team move toward a hybrid model, while I also explored feature analyses such as grammatical errors and experimented with data augmentation to evaluate its impact on performance. After the main framework was established, I integrated augmented data into the training pipeline and tested whether it could further improve accuracy. In addition, I actively reported progress in meetings with our supervisor and contributed to team communication and collaboration. I also participated in the presentation and exchange session in Heilbronn, where I gained valuable feedback from other students, and finally collaborated with my teammates to complete the final paper.
+\subsection{Jiwoo Lee}
+I led the exploratory data analysis (EDA) to identify differences between human-written and machine-generated texts, guiding our feature engineering directly. I developed and extended feature extraction modules, including readability metrics, grammatical error counts, and rhetorical indicators, and integrated them into the classification pipeline. I also researched the limitations of our monolingual approach and proposed concrete feature designs to address these gaps. Additionally, I authored the methodology and conclusion sections, actively contributed to weekly meetings and team coordination, and prepared the poster draft for our project presentation.
+
 \end{document}

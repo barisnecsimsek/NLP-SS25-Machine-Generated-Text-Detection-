@@ -1,0 +1,79 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Bandel et~al.(2022)Bandel, Aharonov, Shmueli-Scheuer, Shnayderman, Slonim, and Ein-Dor}]{bandel2022qcpg}
+Elron Bandel, Ranit Aharonov, Michal Shmueli-Scheuer, Ilya Shnayderman, Noam Slonim, and Liat Ein-Dor. 2022.
+\newblock Quality controlled paraphrase generation.
+\newblock In \emph{Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}, pages 596--609, Dublin, Ireland. Association for Computational Linguistics.
+
+\bibitem[{Georgiou(2024)}]{georgiou2024differentiating}
+Georgios~P Georgiou. 2024.
+\newblock Differentiating between human-written and ai-generated texts using linguistic features automatically extracted from an online computational tool.
+\newblock \emph{arXiv preprint arXiv:2407.03646}.
+
+\bibitem[{Guo et~al.(2024)Guo, Jiao, Yao, Wan, Li, Xu, Zhang, Wang, Zhang, and Mao}]{guo2024ustc}
+Zikang Guo, Kaijie Jiao, Xingyu Yao, Yuning Wan, Haoran Li, Benfeng Xu, Licheng Zhang, Quan Wang, Yongdong Zhang, and Zhendong Mao. 2024.
+\newblock Ustc-bupt at semeval-2024 task 8: Enhancing machine-generated text detection via domain adversarial neural networks and llm embeddings.
+\newblock In \emph{Proceedings of the 18th International Workshop on Semantic Evaluation (SemEval-2024)}, pages 1511--1522.
+
+\bibitem[{Ho and Chan(2023)}]{ho2023transferability}
+T.~Y. Ho and C.~H. Chan. 2023.
+\newblock Evaluating transferability in multilingual text analyses.
+\newblock In \emph{Proceedings of the International AAAI Conference on Web and Social Media}, pages 652--663. PMLR.
+
+\bibitem[{Holtzman et~al.(2019)Holtzman, Buys, Du, Forbes, and Choi}]{holtzman2019curious}
+Ari Holtzman, Jan Buys, Li~Du, Maxwell Forbes, and Yejin Choi. 2019.
+\newblock The curious case of neural text degeneration.
+\newblock \emph{arXiv preprint arXiv:1904.09751}.
+
+\bibitem[{Hu et~al.(2022)Hu, Shen, Wallis, Allen-Zhu, Li, Wang, Wang, Chen et~al.}]{hu2022lora}
+Edward~J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu~Wang, Weizhu Chen, and 1 others. 2022.
+\newblock Lora: Low-rank adaptation of large language models.
+\newblock \emph{ICLR}, 1(2):3.
+
+\bibitem[{Jan Hendrik~Kirchner(2023)}]{OPAI}
+Lama~Ahmad Jan Hendrik~Kirchner. 2023.
+\newblock New ai classifier for indicating ai-written text.
+\newblock \url{https://openai.com/index/new-ai-classifier-for-indicating-ai-written-text/}.
+\newblock Accessed on 19.08.2025.
+
+\bibitem[{Kreps et~al.(2022)Kreps, McCain, and Brundage}]{kreps2022all}
+Sarah Kreps, R~Miles McCain, and Miles Brundage. 2022.
+\newblock All the news that’s fit to fabricate: Ai-generated text as a tool of media misinformation.
+\newblock \emph{Journal of experimental political science}, 9(1):104--117.
+
+\bibitem[{Mitchell et~al.(2023)Mitchell, Lee, Khazatsky, Manning, and Finn}]{mitchell2023detectgpt}
+Eric Mitchell, Yoonho Lee, Alexander Khazatsky, Christopher~D Manning, and Chelsea Finn. 2023.
+\newblock Detectgpt: Zero-shot machine-generated text detection using probability curvature.
+\newblock In \emph{International conference on machine learning}, pages 24950--24962. PMLR.
+
+\bibitem[{Peters et~al.(2009)Peters, Clough, Gey, Karlgren, Magnini, Oard, Stempfhuber, and Womser-Hacker}]{peters2009clef}
+Carol Peters, Paul Clough, Fredric Gey, Jussi Karlgren, Bernardo Magnini, Douglas~W. Oard, Maximilian Stempfhuber, and Christa Womser-Hacker, editors. 2009.
+\newblock \emph{Experimental IR Meets Multilinguality, Multimodality, and Interaction: Proceedings of the CLEF 2009 Workshop}, volume 6241 of \emph{Lecture Notes in Computer Science}.
+
+\bibitem[{Petukhova et~al.(2024)Petukhova, Kazakov, and Kochmar}]{petukhova2024petkaz}
+Kseniia Petukhova, Roman Kazakov, and Ekaterina Kochmar. 2024.
+\newblock Petkaz at semeval-2024 task 8: Can linguistics capture the specifics of llm-generated text?
+\newblock \emph{arXiv preprint arXiv:2404.05483}.
+
+\bibitem[{Sarvazyan et~al.(2024)Sarvazyan, Gonz{\'a}lez, and Franco-Salvador}]{sarvazyan2024genaios}
+Areg~Mikael Sarvazyan, Jos{\'e}-{\'A}ngel Gonz{\'a}lez, and Marc Franco-Salvador. 2024.
+\newblock Genaios at semeval-2024 task 8: Detecting machine-generated text by mixing language model probabilistic features.
+\newblock In \emph{Proceedings of the 18th International Workshop on Semantic Evaluation (SemEval-2024)}, pages 101--107.
+
+\bibitem[{Wahle et~al.(2022)Wahle, Ruas, Kirstein, and Gipp}]{wahle2022large}
+Jan~Philip Wahle, Terry Ruas, Frederic Kirstein, and Bela Gipp. 2022.
+\newblock How large language models are transforming machine-paraphrased plagiarism.
+\newblock \emph{arXiv preprint arXiv:2210.03568}.
+
+\bibitem[{Wang et~al.(2024)Wang, Mansurov, Ivanov, Su, Shelmanov, Tsvigun, Afzal, Mahmoud, Puccetti, Arnold et~al.}]{wang2024semeval}
+Yuxia Wang, Jonibek Mansurov, Petar Ivanov, Jinyan Su, Artem Shelmanov, Akim Tsvigun, Osama~Mohammed Afzal, Tarek Mahmoud, Giovanni Puccetti, Thomas Arnold, and 1 others. 2024.
+\newblock Semeval-2024 task 8: Multidomain, multimodel and multilingual machine-generated text detection.
+\newblock \emph{arXiv preprint arXiv:2404.14183}.
+
+\bibitem[{Wang et~al.(2023)Wang, Mansurov, Ivanov, Su, Shelmanov, Tsvigun, Whitehouse, Afzal, Mahmoud, Sasaki et~al.}]{wang2023m4}
+Yuxia Wang, Jonibek Mansurov, Petar Ivanov, Jinyan Su, Artem Shelmanov, Akim Tsvigun, Chenxi Whitehouse, Osama~Mohammed Afzal, Tarek Mahmoud, Toru Sasaki, and 1 others. 2023.
+\newblock M4: Multi-generator, multi-domain, and multi-lingual black-box machine-generated text detection.
+\newblock \emph{arXiv preprint arXiv:2305.14902}.
+
+\end{thebibliography}

@@ -50,11 +50,19 @@ In the preliminary evaluation using only the baseline RoBERTa model, the accurac
 Therefore, we did not retain data augmentation in the final implementation. Nevertheless, this finding suggests that in future stages, data augmentation may be more effective if it relies on more “manually collected” data resources, ensuring that the distinctive features of human-written text are preserved, and by selecting augmentation strategies tailored to different model architectures.
 # 5 Results 
 
-# 6 Conclusion and Future Work
+# 6 Limitations and Future Work
 Our work in the SemEval Task 8 Subtask A mainly focused on the detection of monolingual English, integrating transformer embeddings with readability, grammatical, and rhetorical features. We showed that hybrid systems can achieve effective performance in machine-generated detection. 
-A key limitation of our approach is its reliance on formulas specific to the English language, which limits their cross-lingual applicability. 
+
+However, a significant limitation of our approach is its reliance on token-level probabilistic signals, which are not universally available across model providers. Many closed-source LLMs do not expose per-token log-probabilities or full next-token distributions. Vendors often restrict these outputs to mitigate risks of model extraction, distillation, or prompt inversion. This restricts our ability to compute key probabilistic features, reducing the generalizability of our detector in real-world deployments. Consequently, our results may overestimate performance when only models that expose probabilities are evaluated.
+
+Even when token probabilities are available, probabilistic features are susceptible to straightforward evasion. Small textual modifications such as adjustments, paraphrases, synonym substitutions, or reordering can shift token likelihoods and entropy without altering the underlying semantics. Such edits can move a sequence from a “high-confidence, low-entropy” toward distributions that resemble human-written text, thereby lowering classifier reliability.
+
+A key limitation of our approach is its reliance on formulas specific to the English language, which limits their cross-lingual applicability.
+
 Future studies should therefore explore the design of multilingual linguistic features. [Ho and Chan, 2023](#references) indicates that cross-lingual transferability depends on linguistic similarity, context, and resource availability, with multilingual models like mBERT performing better on high-resource languages.
+
 As suggested by [Peters et al., 2009](#references) language-specific readability indicies (e.g., LIX, Amstad) could be integrated with language-agnostic features such as sentence length variance, punctuation density, or lexical entropy. A promising direction is to combine cross-lingual embeddings (e.g., XLM-R, mBERT) with symbolic features, and to replace language-specific grammar tools with perplexity-based proxies capable of generalizing robustly across languages. 
+
 Furthermore, rhetorical elements may be extended across languages by mapping language-independent discourse categories ([Sharma & Agrawal, 2019](#references)). Discourse conventions differ across lingustic and cultural contexts. 
 
 
@@ -65,8 +73,7 @@ Richter, J., Haugen, J., Paparoidami, V., & Reber, R. (2023).
 University of Oslo & Norwegian Institute of Public Health.  
 [https://doi.org/10.31234/osf.io/3t8fn](https://doi.org/10.31234/osf.io/3t8fn)
 
-Ho, T. Y., & Chan, C. H. (2023).  
-*Evaluating Transferability in Multilingual Text Analyses.*  
+
 Proceedings of the International AAAI Conference on Web and Social Media, 17(1), 652–663.  
 [https://doi.org/10.1609/icwsm.v17i1.22121](https://doi.org/10.1609/icwsm.v17i1.22121)  
 
@@ -74,6 +81,8 @@ Peters, C., Clough, P., Gey, F., Karlgren, J., Magnini, B., Oard, D. W., … & W
 *Experimental IR Meets Multilinguality, Multimodality, and Interaction: Proceedings of the CLEF 2009 Workshop.*  
 Lecture Notes in Computer Science, vol 6241. Springer.  
 [https://doi.org/10.1007/978-3-642-15751-6](https://doi.org/10.1007/978-3-642-15751-6)  
+
+
 
 Sharma, D., & Agrawal, A. (2019).  
 *Intelligent Human Computer Interaction.*  
@@ -84,3 +93,6 @@ Springer.
 
 
 
+
+
+we included both linguistic and statistical features. which is
