@@ -387,7 +387,7 @@ This ultimately led to a performance increase of approximately 8\%.
 \end{table}
 
 \section{Results}
-On the official SemEval-2024 Task 8 leaderboard, our hybrid system achieved an accuracy of 88.64\% on the monolingual track and 79.87\% on the multilingual track. 
+On the official SemEval-2024 Task 8 leaderboard, our hybrid system achieved an accuracy of 88.64\% on the monolingual track and fully fine-tuned XLM-RoBERTa achieved an accuracy of 79.87\% on the multilingual track. 
 While we did not officially submit to the shared task, these results would have placed our model at position 16 in the monolingual track exceding the baseline and 26 in the multilingual track. 
 It is important to note that such a placement is only meaningful in the context of the number of participating teams (over 120 teams in monolingual and over 50 teams in multilingual), and that our model was not directly ranked but evaluated under the same conditions. 
 
@@ -397,17 +397,17 @@ It is important to note that such a placement is only meaningful in the context 
     \hline
     \textbf{Configuration} & \textbf{Accuracy} & \textbf{F1-Score} \\
     \hline
-    Only RoBERTa & 0.6514 & 0.6810 \\
+    emb & 0.8253 & 0.8233 \\
     
-    RoBERTa + Reading Features & 0.6810 & 0.7102 \\
+    emb + read & 0.8451 & 0.84 \\
     
-    RoBERTa + Probabilistic Features & \textbf{0.773} & \textbf{0.76} \\
+    emb + prob & 0.8855 & 0.885 \\
     
-    RoBERTa + Probabilistic Features & 0.727 & 0.72 \\ 
+    emb + read + prob & \textbf{0.8864} & \textbf{0.89}  \\ 
 
     \hline
     \end{tabular}
-    \caption{Accuracy of different configurations on the development set of the monolingual track.
+    \caption{Accuracy of different configurations on the test set of the monolingual track.
     Configurations include embeddings (emb), lexical diversity (lex), readability (read), token-probabilistic (prob)}
     \label{tab:Accuracy}
 \end{table}

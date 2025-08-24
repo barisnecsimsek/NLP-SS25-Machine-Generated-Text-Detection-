@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex paper"] 1756071270.72084 "paper.aux" "paper.bbl" "paper" 1756071271.92711 0
+["bibtex paper"] 1756071627.79475 "paper.aux" "paper.bbl" "paper" 1756071640.4377 0
   "./acl_natbib.bst" 1755877308.82445 45186 3d1af46d62cc9172ef6e42b56c1cd613 ""
   "./references.bib" 1756069819.52227 5650 c4ff7a785b942066c701f56f019d7060 ""
-  "paper.aux" 1756071271.67793 6852 73da8ec21776e36e1d7a296d0f01a7c7 "pdflatex"
+  "paper.aux" 1756071640.22389 6838 cd0b9c5b0ce3ddb70965886f5b2586b1 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1756071270.79858 "/Users/barissimsek/Desktop/MASAUSTU/NLP praktikum/NLP-SS25-Machine-Generated-Text-Detection/paper/paper.tex" "paper.pdf" "paper" 1756071271.92725 0
-  "/Users/barissimsek/Desktop/MASAUSTU/NLP praktikum/NLP-SS25-Machine-Generated-Text-Detection/paper/paper.tex" 1756071269.34156 33375 ef7f357ffd20b9364edd166183d659a2 ""
+["pdflatex"] 1756071639.38597 "/Users/barissimsek/Desktop/MASAUSTU/NLP praktikum/NLP-SS25-Machine-Generated-Text-Detection/paper/paper.tex" "paper.pdf" "paper" 1756071640.43783 0
+  "/Users/barissimsek/Desktop/MASAUSTU/NLP praktikum/NLP-SS25-Machine-Generated-Text-Detection/paper/paper.tex" 1756071639.20744 33361 0cbcc34af5381cabcecdb261e228462c ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1741388039 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc" 1741388039 7631 5169ff1acd97ff1c4ab83563c99f96f4 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/fontname/texfonts.map" 1741388039 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -206,10 +206,10 @@
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/web2c/texmf.cnf" 1741388039 42151 79f67285bdd95beca4d137b380b4b9e5 ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1741388039 3346141 1288109d02d1c772df65535881471649 ""
   "acl.sty" 1755877308.82408 11615 e2c027f483aa40e577ed34264c8b0655 ""
-  "paper.aux" 1756071271.67793 6852 73da8ec21776e36e1d7a296d0f01a7c7 "pdflatex"
-  "paper.bbl" 1756071270.7955 5599 bf45a816aefef07579ab80580df1d2f5 "bibtex paper"
-  "paper.out" 1756071271.67927 2967 3953042e4dd650d375b113c784db541f "pdflatex"
-  "paper.tex" 1756071269.34156 33375 ef7f357ffd20b9364edd166183d659a2 ""
+  "paper.aux" 1756071640.22389 6838 cd0b9c5b0ce3ddb70965886f5b2586b1 "pdflatex"
+  "paper.bbl" 1756071627.86412 5599 bf45a816aefef07579ab80580df1d2f5 "bibtex paper"
+  "paper.out" 1756071640.225 2967 3953042e4dd650d375b113c784db541f "pdflatex"
+  "paper.tex" 1756071639.20744 33361 0cbcc34af5381cabcecdb261e228462c ""
   (generated)
   "paper.aux"
   "paper.log"
