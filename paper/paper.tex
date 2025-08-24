@@ -388,8 +388,29 @@ This ultimately led to a performance increase of approximately 8\%.
 
 \section{Results}
 On the official SemEval-2024 Task 8 leaderboard, our hybrid system achieved an accuracy of 88.64\% on the monolingual track and 79.87\% on the multilingual track. 
-While we did not officially submit to the shared task, these results would have placed our model at position 16 in the monolingual track. 
-It is important to note that such a placement is only meaningful in the context of the number of participating systems (over 40 teams in total), and that our system was not directly ranked but evaluated under the same conditions. 
+While we did not officially submit to the shared task, these results would have placed our model at position 16 in the monolingual track exceding the baseline and 26 in the multilingual track. 
+It is important to note that such a placement is only meaningful in the context of the number of participating teams (over 120 teams in monolingual and over 50 teams in multilingual), and that our model was not directly ranked but evaluated under the same conditions. 
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l c c}
+    \hline
+    \textbf{Configuration} & \textbf{Accuracy} & \textbf{F1-Score} \\
+    \hline
+    Only RoBERTa & 0.6514 & 0.6810 \\
+    
+    RoBERTa + Reading Features & 0.6810 & 0.7102 \\
+    
+    RoBERTa + Probabilistic Features & \textbf{0.773} & \textbf{0.76} \\
+    
+    RoBERTa + Probabilistic Features & 0.727 & 0.72 \\ 
+
+    \hline
+    \end{tabular}
+    \caption{Accuracy of different configurations on the development set of the monolingual track.
+    Configurations include embeddings (emb), lexical diversity (lex), readability (read), token-probabilistic (prob)}
+    \label{tab:Accuracy}
+\end{table}
 
 Compared to the top-performing contestants, our accuracy is lower than GenAIOS (96.88\% monolingual, 75.67\% multilingual) and USTC-BUPT (96.10\% monolingual), both of which relied heavily on large-scale probabilistic features or domain specific PLM fine-tuning. 
 However, our results are competitive with other hybrid and linguistically motivated approaches such as PetKaz (90.51\% monolingual), despite using a smaller backbone model (RoBERTa-base) and limited computational resources. 
